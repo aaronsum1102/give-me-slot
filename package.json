@@ -11,6 +11,8 @@
   "dependencies": {
     "core-js": "^3.6.4",
     "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.28",
     "register-service-worker": "^1.7.1",
     "serve-static": "^1.14.1",
     "vue": "^2.6.11",

@@ -15,15 +15,25 @@
       :is-success="isSuccess"
       @slotQuery="onSlotQuery"
     />
+    <VendorCard 
+      vendor-name="NTUC"
+      next-slot-start="2020-04-22T16:00:00+08:00"
+      next-slot-end="2020-04-22T17:00:00+08:00"
+      is-loading="false"
+      vendor-cart-link=""
+    />
+    <!-- @refresh -->
   </v-container>
 </template>
 
 <script>
 import PostalCodeQuery from "./PostalCodeQuery";
+import VendorCard from "./VendorCard";
   export default {
     name: 'HomeView',
     components: {
-      PostalCodeQuery
+      PostalCodeQuery,
+      VendorCard
     },
     data: function() {
       return {
