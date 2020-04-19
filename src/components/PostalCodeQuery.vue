@@ -9,10 +9,11 @@
         v-model="postalCode"
         label="Postal code"
         prepend-inner-icon="fa-map-marker-alt"
-        :outlined="true"
-        :rounded="true"
-        :solo="true"
-        :clearable="true"
+        outlined
+        rounded
+        solo
+        clearable
+        hide-details
         :loading="isLoading"
         :rules="[postalCodeRules]"
         :success="isSuccess"

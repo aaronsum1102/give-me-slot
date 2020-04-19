@@ -1,50 +1,81 @@
 <template>
   <v-card
-    :hover="true"
     :loading="isLoading"
+    hover
   >
-    <div class="d-flex flex-no-wrap align-center">
-      <v-avatar
-        class="ma-4"
-        width="150"
-        tile
+    <v-row 
+      class="align-center" 
+      :style="{ height: cardHeight }"
+    >
+      <v-col cols="4">
+        <v-img
+          class="ml-4"
+          :src="require(`../assets/${vendorId}.png`)" 
+          :alt="`${vendorId}-logo`"
+          width="100%"
+          contain
+        />
+      </v-col>
+      
+      <v-col 
+        cols="8" 
+        md="6"
+        style="height: 100%"
       >
-        <v-img 
-          :src="require(`../assets/${vendorName}.png`)" 
-          :alt="`${vendorName}-logo`"
-          contain="true"
-        />
-      </v-avatar>
+        <div 
+          class="d-flex flex-column"
+          style="height: 100%" 
+        >
+          <v-card-title
+            class="headline"
+            v-text="vendorName"
+          />
 
-      <div class="flex-grow-1">
-        <v-card-title
-          class="headline"
-          v-text="vendorName"
-        />
+          <v-card-subtitle v-text="daysToSlot" />
 
-        <v-card-subtitle v-text="daysToSlot" />
+          <v-card-text 
+            v-if="nextSlotStart"
+            class="flex-grow-1"
+          >
+            <p class="mb-0">
+              <strong>Date:</strong> {{ slotDate }}
+              <br>
+              <strong>Period:</strong> {{ slotPeriod }}
+            </p>
+          </v-card-text>
 
-        <v-card-text v-if="nextSlotStart">
-          <p class="mb-0">
-            <strong>Date:</strong> {{ slotDate }}
-            <br>
-            <strong>Period:</strong> {{ slotPeriod }}
-          </p>
-        </v-card-text>
+          <v-card-text 
+            v-else 
+            class="flex-grow-1"
+          >
+            <p class="mb-0">
+              Please try again later.
+            </p>
+          </v-card-text>
 
-        <v-card-text v-else>
-          <p class="mb-0">
-            Please try again later.
-          </p>
-        </v-card-text>
-      </div>
+          <v-card-actions class="d-md-none d-block pb-4">
+            <v-btn 
+              icon 
+              @click="$emit('refresh')"
+            >
+              <v-icon>fa-sync</v-icon>
+            </v-btn>
+            <v-btn 
+              icon 
+              :href="vendorCartLink"
+            >
+              <v-icon>fa-shopping-basket</v-icon>
+            </v-btn>
+          </v-card-actions>  
+        </div>
+      </v-col>
 
       <v-col
-        cols="auto"
-        class="text-center pl-0"
+        cols="2"
+        class="text-center d-none d-md-block"
       >
         <v-row
-          class="flex-column ma-0 fill-height"
+          class="flex-column mr-4 fill-height"
           justify="center"
         >
           <v-col class="px-0">
@@ -66,7 +97,7 @@
           </v-col>
         </v-row>
       </v-col>
-    </div>
+    </v-row>
   </v-card>
 </template>
 
@@ -76,6 +107,10 @@ moment.locale("en-SG")
 export default {
   name: "VendorCard",
   props: {
+    vendorId: {
+      type: String,
+      default : ""
+    },
     vendorName: {
       type: String,
       default: "Vendor"
@@ -98,6 +133,13 @@ export default {
     }
   },
   computed: {
+    cardHeight () {
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs': return '258px'
+          case 'sm': return '252px'
+          default: return '192px'
+        }
+      },
     slotDate: function() {
       return moment(this.nextSlotStart).format('LL');
     },

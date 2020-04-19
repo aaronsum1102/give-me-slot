@@ -10,18 +10,32 @@
         </p>
       </v-col>
     </v-row>
+
     <postal-code-query 
       :is-loading="isLoading"
       :is-success="isSuccess"
       @slotQuery="onSlotQuery"
     />
-    <VendorCard 
-      vendor-name="NTUC"
-      next-slot-start="2020-04-22T16:00:00+08:00"
-      next-slot-end="2020-04-22T17:00:00+08:00"
-      is-loading="false"
-      vendor-cart-link=""
-    />
+
+    <v-row class="justify-center">
+      <v-col 
+        v-for="(vendor, index) in vendors"
+        :key="index"
+        cols="12" 
+        sm="6"
+        lg="5"
+      >
+        <VendorCard
+          :vendor-id="vendor.id"
+          :vendor-name="vendor.name"
+          :next-slot-start="queryStatus[vendor.id].startDateTime"
+          :next-slot-end="queryStatus[vendor.id].endDateTime"
+          :is-loading="queryStatus[vendor.id].isLoading"
+          :vendor-cart-link="vendor.link"
+        />
+      </v-col>  
+    </v-row>  
+    
     <!-- @refresh -->
   </v-container>
 </template>
@@ -29,11 +43,12 @@
 <script>
 import PostalCodeQuery from "./PostalCodeQuery";
 import VendorCard from "./VendorCard";
+import { mapState } from "vuex";
   export default {
     name: 'HomeView',
     components: {
       PostalCodeQuery,
-      VendorCard
+      VendorCard,
     },
     data: function() {
       return {
@@ -42,6 +57,9 @@ import VendorCard from "./VendorCard";
         isLoading: false,
         isSuccess: false,
       }
+    },
+    computed: {
+      ...mapState(["vendors", "queryStatus"])
     },
     methods: {
       onSlotQuery: function(postalCode) {
