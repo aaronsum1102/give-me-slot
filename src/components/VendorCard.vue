@@ -31,10 +31,13 @@
             v-text="vendorName"
           />
 
-          <v-card-subtitle v-text="daysToSlot" />
+          <v-card-subtitle 
+            v-if="nextSlotStart != null" 
+            v-text="daysToSlot" 
+          />
 
           <v-card-text 
-            v-if="nextSlotStart"
+            v-if="nextSlotStart && nextSlotStart != null"
             class="flex-grow-1"
           >
             <p class="mb-0">
@@ -45,7 +48,7 @@
           </v-card-text>
 
           <v-card-text 
-            v-else 
+            v-else-if="nextSlotStart != null"
             class="flex-grow-1"
           >
             <p class="mb-0">
@@ -56,12 +59,14 @@
           <v-card-actions class="d-md-none d-block pb-4">
             <v-btn 
               icon 
+              :disabled="!hasValidQuery"
               @click="$emit('refresh')"
             >
               <v-icon>fa-sync</v-icon>
             </v-btn>
             <v-btn 
               icon 
+              :disabled="!hasValidQuery"
               :href="vendorCartLink"
             >
               <v-icon>fa-shopping-basket</v-icon>
@@ -81,6 +86,7 @@
           <v-col class="px-0">
             <v-btn 
               icon 
+              :disabled="!hasValidQuery"
               @click="$emit('refresh')"
             >
               <v-icon>fa-sync</v-icon>
@@ -91,6 +97,7 @@
             <v-btn 
               icon 
               :href="vendorCartLink"
+              :disabled="!hasValidQuery"
             >
               <v-icon>fa-shopping-basket</v-icon>
             </v-btn>
@@ -130,6 +137,10 @@ export default {
     vendorCartLink: {
       type: String,
       default: ""
+    },
+    hasValidQuery: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

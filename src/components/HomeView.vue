@@ -1,5 +1,9 @@
 <template>
   <v-container>
+    <ErrorModal
+      :error-message="errorMessge"
+      @acknowledge="updateErrorMessage('')"
+    />
     <v-row class="text-center">
       <v-col>
         <h1 class="display-2 font-weight-bold mb-3">
@@ -12,9 +16,9 @@
     </v-row>
 
     <postal-code-query 
-      :is-loading="isLoading"
-      :is-success="isSuccess"
-      @slotQuery="onSlotQuery"
+      :postal-code="postalCode"
+      @updatePostalCode="updatePostalCode($event)"
+      @slotQuery="onSlotQuery()"
     />
 
     <v-row class="justify-center">
@@ -32,21 +36,23 @@
           :next-slot-end="queryStatus[vendor.id].endDateTime"
           :is-loading="queryStatus[vendor.id].isLoading"
           :vendor-cart-link="vendor.link"
+          :has-valid-query="hasValidQuery"
+          @refresh="fetchSlots(vendor.id)"
         />
       </v-col>  
     </v-row>  
-    
-    <!-- @refresh -->
   </v-container>
 </template>
 
 <script>
+import ErrorModal from "./ErrorModal";
 import PostalCodeQuery from "./PostalCodeQuery";
 import VendorCard from "./VendorCard";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
   export default {
     name: 'HomeView',
     components: {
+      ErrorModal,
       PostalCodeQuery,
       VendorCard,
     },
@@ -59,12 +65,34 @@ import { mapState } from "vuex";
       }
     },
     computed: {
-      ...mapState(["vendors", "queryStatus"])
+      ...mapState([
+        "vendors", 
+        "queryStatus", 
+        "errorMessge",
+        "postalCode"
+      ]),
+      hasValidQuery : function () {
+        if(this.postalCode && this.postalCode.length === 6 && !isNaN(parseInt(this.postalCode)) ) {  
+          return true;
+        } else {
+          return false;
+        }
+      }
+    },
+    beforeMount() {
+      this.fetchSettings();
     },
     methods: {
-      onSlotQuery: function(postalCode) {
-        alert("query for postal code " + postalCode);
+      ...mapActions([
+        "fetchSettings",
+        "updateErrorMessage",
+        "updatePostalCode", 
+        "fetchSlots",
+        "fetchSlotsForAllVendors"
+      ]),
+      onSlotQuery: function() {
+        this.fetchSlotsForAllVendors();
       }
-    }
+    } 
   }
 </script>
