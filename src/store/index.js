@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import moment from "moment-timezone";
 
 Vue.use(Vuex);
+moment.locale("en-SG");
 
 const state = {
   vendors: {
@@ -9,7 +11,8 @@ const state = {
   queryStatus: {
   },
   errorMessge: "",
-  postalCode: ""
+  postalCode: "",
+  lastUpdate: ""
 }
 
 const mutations = {
@@ -32,6 +35,9 @@ const mutations = {
       startDateTime: payload.slot.startTime,
       endDateTime: payload.slot.endTime
     }
+  },
+  SET_LAST_UPDATE: function(state) {
+    state.lastUpdate = moment().tz("Asia/Singapore").format('LLL');
   }
 }
 
@@ -95,6 +101,7 @@ const actions = {
             }
           })
         }
+        commit("SET_LAST_UPDATE");
       } else {
         commit("SET_ERROR_MESSAGE", result);
       }

@@ -14,7 +14,20 @@
           :alt="`${vendorId}-logo`"
           width="100%"
           contain
-        />
+        >
+          <template v-slot:placeholder>
+            <v-row
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
+            >
+              <v-progress-circular 
+                indeterminate 
+                color="primary" 
+              />
+            </v-row>
+          </template>
+        </v-img>
       </v-col>
       
       <v-col 

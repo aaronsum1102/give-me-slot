@@ -18,8 +18,15 @@
     <postal-code-query 
       :postal-code="postalCode"
       @updatePostalCode="updatePostalCode($event)"
-      @slotQuery="onSlotQuery()"
+      @slotQuery="fetchSlotsForAllVendors()"
     />
+
+    <p 
+      v-if="lastUpdate"
+      class="font-italic text-center" 
+    >
+      Last update: {{ lastUpdate }}
+    </p>
 
     <v-row class="justify-center">
       <v-col 
@@ -69,7 +76,8 @@ import { mapState, mapActions } from "vuex";
         "vendors", 
         "queryStatus", 
         "errorMessge",
-        "postalCode"
+        "postalCode",
+        "lastUpdate"
       ]),
       hasValidQuery : function () {
         if(this.postalCode && this.postalCode.length === 6 && !isNaN(parseInt(this.postalCode)) ) {  
@@ -89,10 +97,7 @@ import { mapState, mapActions } from "vuex";
         "updatePostalCode", 
         "fetchSlots",
         "fetchSlotsForAllVendors"
-      ]),
-      onSlotQuery: function() {
-        this.fetchSlotsForAllVendors();
-      }
+      ])
     } 
   }
 </script>
