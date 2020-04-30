@@ -41,7 +41,7 @@ const mutations = {
   }
 };
 
-const BASE_URL = "https://cors-anywhere.herokuapp.com/https://give-me-slot-api.herokuapp.com/";
+const BASE_URL = "https://give-me-slot-api.herokuapp.com/";
 
 const getOptions = function() {
   return {
