@@ -27,6 +27,7 @@
         text
         icon
         :disabled="isDisabled || hasError || postalCode.length != 6"
+        @click="onEnterDown()"
       >
         <v-icon 
           color="primary"

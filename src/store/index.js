@@ -41,8 +41,7 @@ const mutations = {
   }
 };
 
-//const BASE_URL = "https://cors-anywhere.herokuapp.com/https://give-me-slot-api.herokuapp.com/";
-const BASE_URL = "http://localhost:4000";
+const BASE_URL = "https://cors-anywhere.herokuapp.com/https://give-me-slot-api.herokuapp.com/";
 
 const getOptions = function() {
   return {
