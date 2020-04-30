@@ -15,8 +15,9 @@
       </v-col>
     </v-row>
 
-    <postal-code-query 
+    <postal-code-query
       :postal-code="postalCode"
+      :is-disabled="!isInitDone"
       @updatePostalCode="updatePostalCode($event)"
       @slotQuery="fetchSlotsForAllVendors()"
     />
@@ -28,8 +29,22 @@
       Last update: {{ lastUpdate }}
     </p>
 
-    <v-row class="justify-center">
-      <v-col 
+    <v-row 
+      v-if="!isInitDone"
+      class="justify-center mt-4"
+    >
+      <v-progress-circular
+        :size="80"
+        color="primary"
+        indeterminate
+      />
+    </v-row>
+    
+    <v-row 
+      v-else
+      lass="justify-center"
+    >
+      <v-col
         v-for="(vendor, index) in vendors"
         :key="index"
         cols="12" 
@@ -69,6 +84,7 @@ import { mapState, mapActions } from "vuex";
         subTitle : "A portal to check for the earliest delivery slot from major online groceries delivery providers in Singapore.",
         isLoading: false,
         isSuccess: false,
+        isInitDone: false
       }
     },
     computed: {
@@ -87,8 +103,9 @@ import { mapState, mapActions } from "vuex";
         }
       }
     },
-    beforeMount() {
-      this.fetchSettings();
+    async beforeMount() {
+      await this.fetchSettings();
+      this.isInitDone = true;
     },
     methods: {
       ...mapActions([

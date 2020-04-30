@@ -1,25 +1,41 @@
 <template>
-  <v-row class="justify-center">
-    <v-col 
-      cols="8" 
-      sm="4"
-    >
-      <v-text-field 
-        ref="postalCodeInput"
-        :value="postalCode"
-        label="Postal code"
-        prepend-inner-icon="fa-map-marker-alt"
-        outlined
-        rounded
-        solo
-        clearable
-        :error="hasError"
-        :error-messages="hasError ? 'Invalid postal code!!!' : ''"
-        @input="$emit('updatePostalCode', $event)"
-        @keydown.enter="onEnterDown()"
-      />          
-    </v-col>
-  </v-row>
+  <div>
+    <v-row class="justify-center">
+      <v-col
+        cols="8" 
+        sm="4"
+      >
+        <v-text-field 
+          ref="postalCodeInput"
+          :value="postalCode"
+          label="Postal code"
+          prepend-inner-icon="fa-map-marker-alt"
+          outlined
+          rounded
+          solo
+          clearable
+          :disabled="isDisabled"
+          :error="hasError"
+          :error-messages="hasError ? 'Invalid postal code!!!' : ''"
+          @input="$emit('updatePostalCode', $event)"
+          @keydown.enter="onEnterDown()"
+        />          
+      </v-col>
+      <v-btn
+        class="mt-3"
+        :height="56"
+        text
+        icon
+        :disabled="isDisabled || hasError || postalCode.length != 6"
+      >
+        <v-icon 
+          color="primary"
+        >
+          fas fa-search
+        </v-icon>  
+      </v-btn>  
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -29,6 +45,10 @@ export default {
       postalCode: {
         type: String,
         default: ""
+      },
+      isDisabled: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {

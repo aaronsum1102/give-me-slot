@@ -1,19 +1,17 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from "vue";
+import Vuex from "vuex";
 import moment from "moment-timezone";
 
 Vue.use(Vuex);
 moment.locale("en-SG");
 
 const state = {
-  vendors: {
-  },
-  queryStatus: {
-  },
+  vendors: {},
+  queryStatus: {},
   errorMessge: "",
   postalCode: "",
   lastUpdate: ""
-}
+};
 
 const mutations = {
   SET_APP_SETTINGS: function(state, payload) {
@@ -23,10 +21,10 @@ const mutations = {
   SET_ERROR_MESSAGE: function(state, message) {
     state.errorMessge = message;
   },
-  SET_POSTAL_CODE : function(state, queryPostalCode) {
+  SET_POSTAL_CODE: function(state, queryPostalCode) {
     state.postalCode = queryPostalCode;
   },
-  SET_LOADING_STATUS : function(state, payload) {
+  SET_LOADING_STATUS: function(state, payload) {
     state.queryStatus[payload.id].isLoading = payload.status;
   },
   SET_QUERY_STATUS: function(state, payload) {
@@ -34,32 +32,35 @@ const mutations = {
       ...state.queryStatus[payload.id],
       startDateTime: payload.slot.startTime,
       endDateTime: payload.slot.endTime
-    }
+    };
   },
   SET_LAST_UPDATE: function(state) {
-    state.lastUpdate = moment().tz("Asia/Singapore").format('LLL');
+    state.lastUpdate = moment()
+      .tz("Asia/Singapore")
+      .format("LLL");
   }
-}
+};
 
-const BASE_URL = "https://cors-anywhere.herokuapp.com/https://give-me-slot-api.herokuapp.com/";
+//const BASE_URL = "https://cors-anywhere.herokuapp.com/https://give-me-slot-api.herokuapp.com/";
+const BASE_URL = "http://localhost:4000";
 
-const getOptions = function () {
+const getOptions = function() {
   return {
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json"
     }
-  }
-}
+  };
+};
 
 const actions = {
-  fetchSettings: async function({commit}) {
+  fetchSettings: async function({ commit }) {
     try {
       let url = `${BASE_URL}/settings`;
       let result = await fetch(url, {
         method: "GET",
         ...getOptions()
       });
-      if(result.ok) {
+      if (result.ok) {
         let settings = await result.json();
         commit("SET_APP_SETTINGS", settings);
       }
@@ -67,14 +68,14 @@ const actions = {
       commit("SET_ERROR_MESSAGE", e);
     }
   },
-  updateErrorMessage: function({commit}, message) {
-    commit("SET_ERROR_MESSAGE", message)
+  updateErrorMessage: function({ commit }, message) {
+    commit("SET_ERROR_MESSAGE", message);
   },
-  updatePostalCode: function({commit}, queryPostalCode) {
+  updatePostalCode: function({ commit }, queryPostalCode) {
     commit("SET_POSTAL_CODE", queryPostalCode);
   },
-  fetchSlots : async function({commit, state}, id) {
-    commit("SET_LOADING_STATUS", {id: id, status: true});
+  fetchSlots: async function({ commit, state }, id) {
+    commit("SET_LOADING_STATUS", { id: id, status: true });
     let url = `${BASE_URL}/schedules/${id.toLowerCase()}/${state.postalCode}`;
     try {
       let response = await fetch(url, {
@@ -82,16 +83,16 @@ const actions = {
         ...getOptions()
       });
       let result = await response.json();
-      if(response.ok) {
+      if (response.ok) {
         let earliestSlot = result.slots.find(s => s.isAvailable);
-        if(!earliestSlot) {
+        if (!earliestSlot) {
           commit("SET_QUERY_STATUS", {
             id: result.id,
             slot: {
               startTime: "",
               endTime: ""
             }
-          })
+          });
         } else {
           commit("SET_QUERY_STATUS", {
             id: result.id,
@@ -99,7 +100,7 @@ const actions = {
               startTime: earliestSlot.startTime,
               endTime: earliestSlot.endTime
             }
-          })
+          });
         }
         commit("SET_LAST_UPDATE");
       } else {
@@ -108,17 +109,17 @@ const actions = {
     } catch (e) {
       commit("SET_ERROR_MESSAGE", e);
     } finally {
-      commit("SET_LOADING_STATUS", {id: id, status: false});
+      commit("SET_LOADING_STATUS", { id: id, status: false });
     }
   },
-  fetchSlotsForAllVendors: async function ({state, dispatch}) {
+  fetchSlotsForAllVendors: async function({ state, dispatch }) {
     let slotRequest = [];
-    for(const vendorId in state.vendors) {
+    for (const vendorId in state.vendors) {
       slotRequest.push(dispatch("fetchSlots", vendorId));
     }
     Promise.all(slotRequest);
-  },
-}
+  }
+};
 
 export default new Vuex.Store({
   state,
