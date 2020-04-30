@@ -1,29 +1,5 @@
-# give-me-slot
+# [GiveMeSlot](https://give-me-slot.herokuapp.com/)
 
-## Project setup
-```
-yarn install
-```
+A portal to check for the earliest delivery slot from major online groceries delivery providers in Singapore.
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
-
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+*Build with Vue and Vuetify*
