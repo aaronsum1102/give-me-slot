@@ -4,7 +4,7 @@
       :error-message="errorMessge"
       @acknowledge="updateErrorMessage('')"
     />
-    <v-row class="text-center">
+    <v-row class="text-center mt-6">
       <v-col>
         <h1 class="display-2 font-weight-bold mb-3">
           {{ title }}
@@ -42,7 +42,7 @@
     
     <v-row 
       v-else
-      lass="justify-center"
+      class="justify-center"
     >
       <v-col
         v-for="(vendor, index) in vendors"
@@ -52,6 +52,7 @@
         lg="5"
       >
         <VendorCard
+          class="ml-2 mr-2"
           :vendor-id="vendor.id"
           :vendor-name="vendor.name"
           :next-slot-start="queryStatus[vendor.id].startDateTime"
