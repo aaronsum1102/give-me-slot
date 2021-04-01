@@ -5,7 +5,7 @@
       color="primary" 
       dark
     >
-      <div class="d-flex align-center">
+      <div class="d-flex align-center flex-grow-1">
         <v-img
           alt="App Logo"
           class="shrink mr-2"
@@ -15,15 +15,24 @@
           width="56"
         />
 
-        <h2 class="headline font-weight-bold ">
+        <h2 class="headline font-weight-bold mr-auto">
           Give Me Slot
         </h2>
+
+        <v-switch
+          v-model="$vuetify.theme.dark"
+          :label="$vuetify.breakpoint.name != 'xs' ? 'Dark mode': ''"
+          :color="$vuetify.theme.themes.light.primary"
+          hide-details
+          inset
+          persistent-hint
+        />
       </div>
     </v-app-bar>
 
-    <v-content>
+    <v-main :class="{'grey lighten-3': !$vuetify.theme.dark}">
       <HomeView />
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

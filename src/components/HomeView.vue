@@ -50,9 +50,9 @@
         cols="12" 
         sm="6"
         lg="5"
+        class="mt-3 mb-3"
       >
         <VendorCard
-          class="ml-2 mr-2"
           :vendor-id="vendor.id"
           :vendor-name="vendor.name"
           :next-slot-start="queryStatus[vendor.id].startDateTime"

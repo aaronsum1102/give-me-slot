@@ -8,7 +8,7 @@
         <v-text-field 
           ref="postalCodeInput"
           :value="postalCode"
-          label="Postal code"
+          label="049213"
           prepend-inner-icon="fa-map-marker-alt"
           outlined
           rounded
@@ -26,7 +26,7 @@
         :height="56"
         text
         icon
-        :disabled="isDisabled || hasError || postalCode.length != 6"
+        :disabled="isDisabled || hasError || postalCode && postalCode.length != 6"
         @click="onEnterDown()"
       >
         <v-icon 
